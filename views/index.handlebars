@@ -1,0 +1,41 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<h1>Eat-Da-Burger!</h1>
+
+<ul>
+  {{#each burgers}}
+    {{#unless this.devoured}}
+      {{this.id}}.{{this.burger_name}}
+      <form>
+                <input type="hidden" value={{this.id}} type="text" id="burger-id">
+                <button type="submit" id="devour-form">Devour!</button>
+      </form>
+
+    {{/unless}}
+  {{/each}}
+</ul>
+
+
+
+<form action="/create" method="POST">
+Burger Name: <input id="name" type="text" name="burger_name" value=""><br>
+
+<button id ="button" type="submit" value="Submit">Submit</button>
+
+</form>
+
+<script>
+   $(document).ready(function() {
+    $("#devour-form").on("submit", function(e) {
+        e.preventDefault();
+
+        var burger_id = $(this).children("#burger-id").val()
+        $.ajax({
+            method: "PUT",
+            url: "/" + burger_id
+        }).then(function(data) {
+            location.reload();
+        })
+    })
+});
+</script>
